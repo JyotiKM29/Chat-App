@@ -1,7 +1,9 @@
 const express = require("express");
 const { chats } = require("./data/data");
+const dotenv = require("dotenv")
 
 const app = express();
+dotenv.config();
 
 // checking Api connection
 app.get('/' , (req, res)=>{
@@ -23,5 +25,6 @@ app.get('/api/chat/:id',(req,res) =>{
     res.send(singleChat);
 });
 
+const PORT = process.env.PORT||9000;
 
-app.listen(8000, console.log("Server is setup"));
+app.listen(PORT, console.log(`Server is setup ${PORT}`));
