@@ -25,10 +25,10 @@ const HomePage = () => {
        borderRadius='lg'
        borderWidth='1px'
        >
-<Tabs variant='soft-rounded' colorScheme='green'>
-  <TabList mb='1em'>
-    <Tab width='50%'>Login</Tab>
-    <Tab width='50%'>Sign Up</Tab>
+<Tabs variant='soft-rounded' colorScheme='blue'>
+  <TabList mb='1em' >
+    <Tab width='50%' >Login</Tab>
+    <Tab width='50%' >Sign Up</Tab>
   </TabList>
   <TabPanels>
     <TabPanel>
