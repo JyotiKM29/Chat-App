@@ -7,7 +7,7 @@ import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 const Login = () => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
-  const [passward, setPassward] = useState();
+  const [passward, setPassword] = useState();
  
 
   // show and hide button
@@ -23,7 +23,7 @@ const Login = () => {
      
 
       {/* Email */}
-      <FormControl id="email" isRequired>
+      <FormControl id="email1" isRequired>
         <FormLabel>
           Email
         </FormLabel>
@@ -34,15 +34,15 @@ const Login = () => {
       </FormControl>
 
       {/* Passward */}
-      <FormControl id="passward" isRequired>
+      <FormControl id="password1" isRequired>
         <FormLabel>
           Passward
         </FormLabel>
         <InputGroup size="md">
           <Input
             type={show ? "text" : "password"}
-            placeholder="Enter your Passward"
-            onChange={(e) => setPassward(e.target.value)}
+            placeholder="Enter your Password"
+            onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem" >
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -70,7 +70,7 @@ const Login = () => {
       onClick={
         () =>{
           setEmail("guest@example.com");
-          setPassward("123456");
+          setPassword("123456");
       }}
       >
         Get Guest User Credentials
