@@ -8,8 +8,8 @@ const Signup = () => {
   const [show, setShow] = useState(false);
   const [name, setName] = useState();
   const [email, setEmail] = useState();
-  const [passward, setPassward] = useState();
-  const [confirmpassward, setconfirmpassward] = useState();
+  const [password, setPassword] = useState();
+  const [confirmpassword, setconfirmpassword] = useState();
   const [pic, setPic] = useState();
 
 
@@ -46,15 +46,15 @@ const Signup = () => {
       </FormControl>
 
       {/* Passward */}
-      <FormControl id="passward" isRequired>
+      <FormControl id="password" isRequired>
         <FormLabel>
-          Passward
+          Password
         </FormLabel>
         <InputGroup size="md">
           <Input
             type={show ? "text" : "password"}
             placeholder="Enter your Passward"
-            onChange={(e) => setPassward(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem" >
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -66,7 +66,7 @@ const Signup = () => {
 
 
       {/* Confirm Passward */}
-      <FormControl id="passward" isRequired>
+      <FormControl id="password" isRequired>
         <FormLabel>
           Confirm Passward
         </FormLabel>
@@ -74,7 +74,7 @@ const Signup = () => {
           <Input
             type={show?"text":"password"}
             placeholder="Confirm Passward"
-            onChange={(e) => setconfirmpassward(e.target.value)}
+            onChange={(e) => setconfirmpassword(e.target.value)}
           />
           <InputRightElement width="4.5rem" >
             <Button h="1.75rem" size="sm" onClick={handleClick}>
