@@ -72,4 +72,12 @@ const authUser = asyncHandler(async (req, res) => {
 })
 
 
+
+// AllUser - search
+// /api/user
+const allUsers = asyncHandler(() => {
+
+})
+
+
 module.exports = { registerUser , authUser};
