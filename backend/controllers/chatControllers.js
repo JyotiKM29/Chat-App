@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Chat = require("../models/chatModel");
-const User = require('../models/userModel');
-
+const User = require("../models/userModel");
 
 // to getting access of Chats
 const accessChat = asyncHandler(async (req, res) => {
@@ -55,26 +54,147 @@ const accessChat = asyncHandler(async (req, res) => {
   }
 });
 
-
 // fetch all Chats of use
-const fetchChats = asyncHandler(async(req, res) =>{
-    try{
-        chat.find({users: { $elemMatch: { $eq: req.user._id }}})
-        .populate("users","-password")
-        .populate("groupAdmin","-password")
-        .populate("latestMessage")
-        .sort({ updatedAt: -1})
-        .then(async (results) => {
-            results = await User.populate(results, {
-                path: "LatestMessage.sender",
-                select: "name pic email",
-            });
-
-            res.status(200).send(results);
+const fetchChats = asyncHandler(async (req, res) => {
+  try {
+    chat
+      .find({ users: { $elemMatch: { $eq: req.user._id } } })
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password")
+      .populate("latestMessage")
+      .sort({ updatedAt: -1 })
+      .then(async (results) => {
+        results = await User.populate(results, {
+          path: "LatestMessage.sender",
+          select: "name pic email",
         });
-    }catch(error){
 
-    }
+        res.status(200).send(results);
+      });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
 });
 
-module.exports = {accessChat ,fetchChats};
+// Create Group
+const createGroupChat = asyncHandler(async (req, res) => {
+  // Check that all fiels are filled
+  if (!req.body.users || !req.body.name) {
+    return res.status(400).send({ message: "Please Fill all the fields" });
+  }
+
+  // to pass it frontend convert in json
+  var users = JSON.parse(req.body.users);
+
+  //Check is group is of more than 2 users
+
+  if (users.length < 2) {
+    return res
+      .status(400)
+      .send("More than 2 users are required to form a group chat");
+  }
+
+  // push users in chat
+  users.push(req.user);
+
+  try {
+    // creating group
+    const groupChat = await Chat.create({
+      chatName: req.body.name,
+      users: users,
+      isGroupChat: true,
+      groupAdmin: req.user,
+    });
+
+    // fetching group
+    const fullGroupChat = await Chat.findOne({
+      _id: groupChat._id,
+    })
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password");
+
+    res.status(200).json(fullGroupChat);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
+// Rename the Group Name
+const removeFormGroup = asyncHandler(async (req, res) => {
+  const { chatId, chatName } = req.body;
+
+  const updatedChat = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      chatName,
+    },
+    {
+      new: true,
+    }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  // check group name is updated
+  if (!updatedChat) {
+    res.status(404);
+    throw new Error("Chat Not Found");
+  } else {
+    res.json(updatedChat);
+  }
+});
+
+// Add user to group
+const addToGroup = asyncHandler(async (req, res) => {
+  const { chatId, userId } = req.body;
+
+  const added = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $push: { users: userId },
+    },
+    { new: true }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!added) {
+    res.status(404);
+    throw new Error("Chat Node Found");
+  } else {
+    res.json(added);
+  }
+});
+
+// delete user from group
+const removeFromGroup = asyncHandler(async (req, res) => {
+  const { chatId, userId } = req.body;
+
+  const removed = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $pull: { users: userId },
+    },
+    { new: true }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!removed) {
+    res.status(404);
+    throw new Error("Chat Node Found");
+  } else {
+    res.json(removed);
+  }
+});
+
+module.exports = {
+  accessChat,
+  fetchChats,
+  createGroupChat,
+  removeFormGroup,
+  addToGroup,
+  removeFromGroup,
+};
