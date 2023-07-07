@@ -3,7 +3,8 @@ const { chats } = require("./data/data.js");
 const dotenv = require("dotenv");
 const connectDB = require("./Config/db.js");
 const colors = require('colors') 
-const userRoutes = require('./routes/userRoutes')
+const userRoutes = require('./routes/userRoutes');
+const chatRoutes = require('./routes/chatRoutes.js');
 const { notFound , errorHandler } = require('./middleware/errorMiddleware')
 
 dotenv.config();
@@ -20,7 +21,8 @@ app.get('/' , (req, res)=>{
 
 
 // Api callling for logi and Signin
-app.use("/api/user" , userRoutes)
+app.use("/api/user" , userRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Add error handling Middleware
 app.use(notFound)
