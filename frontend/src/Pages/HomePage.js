@@ -3,9 +3,25 @@ import {Container , Box ,Text} from '@chakra-ui/react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import Login from '../components/Authentication/Login';
 import Signup from '../components/Authentication/Signup';
+import { useHistory } from "react-router";
+import { useEffect } from "react";
+// import ChatProvider from '../Context/ChatProvider';
+
+
 
 const HomePage = () => {
+  // const {user , setUser} = useContext(ChatProvider);
+
+  const history = useHistory();
+  
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userInfo"));
+
+    if (user) history.push("/chats");
+  }, [history]);
+
   return (
+
     <Container maxW='xl' centerContent >
        <Box
        d='flex'
